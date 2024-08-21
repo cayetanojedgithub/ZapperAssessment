@@ -1,5 +1,7 @@
 ﻿internal class Program
 {
+    private static string filePath = "inputSettings.bin";
+
     private static void Main(string[] args)
     {
         Console.WriteLine("Please enter user settings string:");
@@ -26,6 +28,14 @@
         if (response != null && response.ToLower() == "y")
         {
             SaveInputSettings(input);
+
+            Console.WriteLine("Would you like to recheck the information saved? [y/n]");
+            var checkResponse = Console.ReadLine();
+
+            if (checkResponse != null && checkResponse.ToLower() == "y")
+            {
+                ReadSavedInputSettings();
+            }
         }
 
 
@@ -69,9 +79,15 @@
 
         void SaveInputSettings(string input)
         {
-            string filePath = "inputSettings.bin";
             byte settingsByte = Convert.ToByte(input, 2);
             File.WriteAllBytes(filePath, new[] { settingsByte });
+            Console.WriteLine($"Information save to {filePath}");
+        }
+
+        void ReadSavedInputSettings()
+        {
+            byte settingsByte = File.ReadAllBytes(filePath)[0];
+            Console.WriteLine(Convert.ToString(settingsByte, 2));
         }
     }
 }
